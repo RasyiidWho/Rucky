@@ -1,6 +1,7 @@
 package com.mayank.rucky;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.DownloadManager;
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -25,6 +26,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
+import android.os.PowerManager;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -120,8 +122,10 @@ public class MainActivity extends AppCompatActivity {
     static int mode;
     static int language;
     public static Button ExeBtn;
-    boolean doubleBackToExitPressedOnce = false;
+    public static boolean dobel = false;
+    public static PowerManager.WakeLock wakeLock;
 
+    @SuppressLint("InvalidWakeLockTag")
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
     protected void onCreate(Bundle savedInstanceState)throws NullPointerException {
@@ -138,6 +142,10 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbarMain);
         toolbar.setTitleTextColor(ContextCompat.getColor(this,R.color.accent));
         setSupportActionBar(toolbar);
+
+//        PowerManager pm = (PowerManager) getApplicationContext().getSystemService(Context.POWER_SERVICE);
+//        wakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "TAG");
+//        wakeLock.acquire(10*60*1000L /*10 minutes*/);
 
         NotificationChannel pnotificationChannel;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -376,17 +384,7 @@ public class MainActivity extends AppCompatActivity {
         });
         ExeBtn.setOnClickListener(view -> {
             EditText scripts = findViewById(R.id.code);
-            if (!doubleBackToExitPressedOnce) {
-                this.doubleBackToExitPressedOnce = true;
-                new Handler().postDelayed(() -> {
-                    doubleBackToExitPressedOnce = false;
-                }, 1000);
-
-                launchAttack(mode, language, scripts.getText().toString());
-                Toast.makeText(this, "EXECUTED", Toast.LENGTH_LONG).show();
-            } else {
-                Toast.makeText(this, "CALM DOWN", Toast.LENGTH_SHORT).show();
-            }
+            launchAttack(mode, language, scripts.getText().toString());
         });
         initPiResolveListener();
         initPiDiscoveryListener();
@@ -887,6 +885,21 @@ public class MainActivity extends AppCompatActivity {
         if (usbConnected) smallText += context.getResources().getString(R.string.conn_usb_small)+"!";
         else if (piConnected) smallText += context.getResources().getString(R.string.conn_pi_small)+"!";
         else smallText += context.getResources().getString(R.string.conn_none)+"!";
+//        wakeLock.acquire(10*60*1000L /*10 minutes*/);
+        if(usbConnected) {
+            if (!dobel) {
+                dobel = true;
+                new Handler().postDelayed(() -> {
+                    dobel = false;
+                }, 2000);
+                new Handler().postDelayed(() -> {
+                    ExeBtn.callOnClick();
+                }, 1000);
+                Toast.makeText(context, "TEREKSEKUSI", Toast.LENGTH_SHORT).show();
+            } else {
+
+            }
+        }
         String usbText = " " + context.getResources().getString(!usbConnected?R.string.conn_0:R.string.conn_1);
         String piText = " " + context.getResources().getString(!piConnected?R.string.conn_0:R.string.conn_1);
         Intent notificationIntent = new Intent(context, SplashActivity.class);
@@ -976,7 +989,18 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-    public static void trigger(Context c) {
-        ExeBtn.callOnClick();
-    }
+
+//    public static void trigger(Context c) {
+//        if (!dobel) {
+//            dobel = true;
+//            new Handler().postDelayed(() -> {
+//                dobel = false;
+//            }, 2000);
+//            new Handler().postDelayed(() -> {
+//                ExeBtn.callOnClick();
+//            }, 1000);
+//        } else {
+//
+//        }
+//    }
 }
