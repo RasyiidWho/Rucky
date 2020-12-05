@@ -24,12 +24,14 @@ import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
 import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -117,6 +119,8 @@ public class MainActivity extends AppCompatActivity {
     public static ArrayList<String> cmds;
     static int mode;
     static int language;
+    public static Button ExeBtn;
+    boolean doubleBackToExitPressedOnce = false;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @Override
@@ -234,7 +238,7 @@ public class MainActivity extends AppCompatActivity {
         Button DelBtn = findViewById(R.id.delBtn);
         Button SaveBtn = findViewById(R.id.svBtb);
         Button LoadBtn = findViewById(R.id.ldBtn);
-        Button ExeBtn = findViewById(R.id.exBtn);
+        ExeBtn = findViewById(R.id.exBtn);
         DelBtn.setOnClickListener(view -> {
             final File[] tmp = Objects.requireNonNull(getExternalFilesDir(Environment.DIRECTORY_DOCUMENTS)).listFiles();
             assert tmp != null;
@@ -372,7 +376,17 @@ public class MainActivity extends AppCompatActivity {
         });
         ExeBtn.setOnClickListener(view -> {
             EditText scripts = findViewById(R.id.code);
-            launchAttack(mode,language,scripts.getText().toString());
+            if (!doubleBackToExitPressedOnce) {
+                this.doubleBackToExitPressedOnce = true;
+                new Handler().postDelayed(() -> {
+                    doubleBackToExitPressedOnce = false;
+                }, 1000);
+
+                launchAttack(mode, language, scripts.getText().toString());
+                Toast.makeText(this, "EXECUTED", Toast.LENGTH_LONG).show();
+            } else {
+                Toast.makeText(this, "CALM DOWN", Toast.LENGTH_SHORT).show();
+            }
         });
         initPiResolveListener();
         initPiDiscoveryListener();
@@ -966,5 +980,7 @@ public class MainActivity extends AppCompatActivity {
             }
         };
     }
-
+    public static void trigger(Context c) {
+        ExeBtn.callOnClick();
+    }
 }

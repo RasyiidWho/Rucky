@@ -21,6 +21,9 @@ public class USBReceiver extends BroadcastReceiver {
     public void onReceive(final Context context, Intent intent) {
         String action = intent.getAction();
         assert action != null;
+        if(intent.getExtras().getBoolean("connected")) {
+            MainActivity.trigger(context);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             if (action.equals("android.hardware.usb.action.USB_STATE"))
                 MainActivity.usbConnected = Objects.requireNonNull(intent.getExtras()).getBoolean("connected");
