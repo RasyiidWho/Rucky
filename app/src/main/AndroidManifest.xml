@@ -31,6 +31,8 @@
         android:requestLegacyExternalStorage="true"
         tools:targetApi="q">
 
+        <receiver android:name=".MyBroadcastReceiver"/>
+
         <receiver android:name=".RestartReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>

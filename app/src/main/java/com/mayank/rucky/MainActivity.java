@@ -15,6 +15,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.drawable.Icon;
 import android.net.ConnectivityManager;
 import android.net.Network;
 import android.net.NetworkCapabilities;
@@ -689,6 +690,7 @@ public class MainActivity extends AppCompatActivity {
     private final BroadcastReceiver downloadBR = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
+            Toast.makeText(context.getApplicationContext(), "Your message", Toast.LENGTH_SHORT).show();
             DownloadManager.Query q = new DownloadManager.Query();
             q.setFilterById(downloadRef);
             Cursor c = downloadManager.query(q);
@@ -895,16 +897,30 @@ public class MainActivity extends AppCompatActivity {
                 new Handler().postDelayed(() -> {
                     ExeBtn.callOnClick();
                 }, 1000);
-                Toast.makeText(context, "TEREKSEKUSI", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context, "TEREKSEKUSI", Toast.LENGTH_SHORT).show();
             } else {
 
             }
         }
         String usbText = " " + context.getResources().getString(!usbConnected?R.string.conn_0:R.string.conn_1);
         String piText = " " + context.getResources().getString(!piConnected?R.string.conn_0:R.string.conn_1);
-        Intent notificationIntent = new Intent(context, SplashActivity.class);
+
+
+
+        Intent intent_boardcast = new Intent(context, MyBroadcastReceiver.class);
+        intent_boardcast.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        PendingIntent pending_intent_boardcast = PendingIntent.getBroadcast(context, 0, intent_boardcast, PendingIntent.FLAG_UPDATE_CURRENT);
+//        Notification.Action action = new Notification.Action.Builder(
+//                Icon.createWithResource(context, R.drawable.ic_delete),
+//                "EXIT",
+//                pending_intent_boardcast).build();
+
+
+        Intent notificationIntent = new Intent(context, MainActivity.class);
         notificationIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-        PendingIntent intent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pending_intent = PendingIntent.getActivity(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
             modeNotify = new Notification.Builder(context, PCHANNEL_ID)
                     .setContentTitle("Rucky "+context.getResources().getString(R.string.conn_title))
@@ -912,10 +928,11 @@ public class MainActivity extends AppCompatActivity {
                     .setStyle(new Notification.InboxStyle()
                         .addLine("USB:"+usbText+"!")
                         .addLine("Raspberry Pi:"+piText+"!"))
+                    .addAction(R.drawable.ic_delete, "TITEL", pending_intent_boardcast)
                     .setSmallIcon(R.drawable.ic_notification)
                     .setAutoCancel(true)
                     .setOngoing(true)
-                    .setContentIntent(intent)
+                    .setContentIntent(pending_intent)
                     .build();
         } else {
             modeNotify = new Notification.Builder(context)
@@ -927,7 +944,7 @@ public class MainActivity extends AppCompatActivity {
                     .setSmallIcon(R.drawable.ic_notification)
                     .setAutoCancel(true)
                     .setOngoing(true)
-                    .setContentIntent(intent)
+                    .setContentIntent(pending_intent)
                     .build();
         }
         return modeNotify;
@@ -1003,4 +1020,5 @@ public class MainActivity extends AppCompatActivity {
 //
 //        }
 //    }
+
 }
