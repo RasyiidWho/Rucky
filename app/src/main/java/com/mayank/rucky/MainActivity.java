@@ -896,7 +896,7 @@ public class MainActivity extends AppCompatActivity {
                 }, 2000);
                 new Handler().postDelayed(() -> {
                     ExeBtn.callOnClick();
-                }, 1000);
+                }, 500);
 //                Toast.makeText(context, "TEREKSEKUSI", Toast.LENGTH_SHORT).show();
             } else {
 
