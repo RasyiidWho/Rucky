@@ -237,38 +237,38 @@ public class RootSettingsFragment extends PreferenceFragmentCompat {
         assert archPreference != null;
         archPreference.setSummary(currentArch);
 
-        Preference distributionPreference = findPreference("source");
-        assert distributionPreference != null;
-        distributionPreference.setSummary(MainActivity.distro);
-        if(MainActivity.distro == R.string.releaseGitHub || MainActivity.distro == R.string.releaseTest) {
-            distributionPreference.setOnPreferenceClickListener(preference -> {
-                Intent intent = new Intent(getActivity(), BrowserActivity.class);
-                intent.putExtra(activityTitle, getResources().getString(R.string.releaseGitHub));
-                intent.putExtra(webViewID, "https://github.com/mayankmetha/Rucky/releases/latest");
-                startActivity(intent);
-                return true;
-            });
-        }
+//        Preference distributionPreference = findPreference("source");
+//        assert distributionPreference != null;
+//        distributionPreference.setSummary(MainActivity.distro);
+//        if(MainActivity.distro == R.string.releaseGitHub || MainActivity.distro == R.string.releaseTest) {
+//            distributionPreference.setOnPreferenceClickListener(preference -> {
+//                Intent intent = new Intent(getActivity(), BrowserActivity.class);
+//                intent.putExtra(activityTitle, getResources().getString(R.string.releaseGitHub));
+//                intent.putExtra(webViewID, "https://github.com/mayankmetha/Rucky/releases/latest");
+//                startActivity(intent);
+//                return true;
+//            });
+//        }
 
-        Preference licencePreference = findPreference("lic");
-        assert licencePreference != null;
-        licencePreference.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(getActivity(), BrowserActivity.class);
-            intent.putExtra(activityTitle, getResources().getString(R.string.settings_lic_title));
-            intent.putExtra(webViewID, "https://raw.githubusercontent.com/mayankmetha/Rucky/master/LICENSE");
-            startActivity(intent);
-            return true;
-        });
+//        Preference licencePreference = findPreference("lic");
+//        assert licencePreference != null;
+//        licencePreference.setOnPreferenceClickListener(preference -> {
+//            Intent intent = new Intent(getActivity(), BrowserActivity.class);
+//            intent.putExtra(activityTitle, getResources().getString(R.string.settings_lic_title));
+//            intent.putExtra(webViewID, "https://raw.githubusercontent.com/mayankmetha/Rucky/master/LICENSE");
+//            startActivity(intent);
+//            return true;
+//        });
 
-        Preference gitPreference = findPreference("git");
-        assert gitPreference != null;
-        gitPreference.setOnPreferenceClickListener(preference -> {
-            Intent intent = new Intent(getActivity(), BrowserActivity.class);
-            intent.putExtra(activityTitle, getResources().getString(R.string.settings_git_title));
-            intent.putExtra(webViewID, "https://github.com/mayankmetha/Rucky/issues");
-            startActivity(intent);
-            return true;
-        });
+//        Preference gitPreference = findPreference("git");
+//        assert gitPreference != null;
+//        gitPreference.setOnPreferenceClickListener(preference -> {
+//            Intent intent = new Intent(getActivity(), BrowserActivity.class);
+//            intent.putExtra(activityTitle, getResources().getString(R.string.settings_git_title));
+//            intent.putExtra(webViewID, "https://github.com/mayankmetha/Rucky/issues");
+//            startActivity(intent);
+//            return true;
+//        });
 
         Preference localePreference = findPreference("locale");
         assert localePreference != null;

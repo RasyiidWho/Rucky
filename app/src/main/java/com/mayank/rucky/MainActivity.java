@@ -800,10 +800,6 @@ public class MainActivity extends AppCompatActivity {
             permission.add(Manifest.permission.WRITE_EXTERNAL_STORAGE);
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED)
             permission.add(Manifest.permission.READ_EXTERNAL_STORAGE);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            permission.add(Manifest.permission.ACCESS_FINE_LOCATION);
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED)
-            permission.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         if (!permission.isEmpty()) {
             String[] per = new String[permission.size()];
             ActivityCompat.requestPermissions(this, permission.toArray(per), PERM);

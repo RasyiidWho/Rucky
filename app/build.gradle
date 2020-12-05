@@ -17,8 +17,7 @@ android {
                 checkReleaseBuilds false
                 abortOnError false
             }
-            minifyEnabled true
-            shrinkResources true
+            debuggable true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
